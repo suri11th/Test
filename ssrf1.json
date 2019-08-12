@@ -1,0 +1,49 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"description": "This is a swagger file for caas. It contains REST api calls for http based flow run, test action and running individual action.",
+		"version": "1.0.0",
+		"title": "Swagger CAAS",
+		"contact": {
+			"email": "Deepak.poojari@softwareag.com"
+		}
+	},
+	"basePath": "/",
+	"tags": [
+		{
+			"name": "Run Action",
+			"description": "Running individual action in CAAS."
+		}
+	],
+	"schemes": [
+		"https",
+		"http"
+	],
+	"paths": {
+		"/connector/action": {
+			"post": {
+				"tags": [
+					"Run Action"
+				],
+				"summary": "Executing built.io flow action via http request",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "Body to be provided to run individual action",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Action"
+						}
+					}
+				]
+			}
+		}
+	}
+}
