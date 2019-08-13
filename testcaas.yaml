@@ -1,0 +1,169 @@
+swagger: "2.0"
+info:
+  description: "This is a swagger file for caas. It contains REST api calls for http based flow run, test action and running individual action."
+  version: "1.0.0"
+  title: "Swagger CAAS"
+  contact:
+    email: "Deepak.poojari@softwareag.com"
+basePath: "/"
+tags:
+- name: "Run Action"
+  description: "Running individual action in CAAS."
+schemes:
+- "https"
+- "http"
+paths:
+  /connector/action:
+    post:
+      tags:
+      - "Run Action"
+      summary: "Executing built.io flow action via http request"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Body to be provided to run individual action"
+        required: true
+        schema:
+          $ref: "#/definitions/Action"
+      responses:
+        200:
+          description: "Action run successfully"
+          schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    description: contains action output data
+        403:
+          description: "Unauthorised request"
+          schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    description: Error message
+        500:
+          description: "Internal server error"
+          schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    description: Contains Error message
+
+  /flow:
+    post:
+      tags:
+      - "Flow Run"
+      summary: "Executing flow via http request"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Body to be provided to run flow and test action"
+        required: true
+        schema:
+          $ref: "#/definitions/FlowRun"
+      responses:
+        200:
+          description: "flow run successfully"
+          schema:
+                type: object
+                description: Returns data if return data on sync webhook is used.
+        403:
+          description: "Unauthorised request"
+          schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    description: Error message
+        500:
+          description: "Internal server error"
+          schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    description: Contains Error message
+
+definitions:
+  Action:
+    type: object
+    required:
+    - "data"
+    properties:
+      data:
+        type: "object"
+        required:
+          - "input"
+        properties:
+          version: 
+            type: "string"
+            description: "connector version"
+            example: "v1"
+          provider: 
+            type: "string"
+            description: "connector name"
+            example: "devtools-http-request"
+          input:
+            type: "object"
+            description: "input to be provided for action"
+  FlowRun:
+    type: "object"
+    required:
+    - "data"
+    properties:
+      data:
+        type: "object"
+        properties:
+          config: 
+            example: "default"
+            type: "string"
+          tenanat_uid:
+            type: "string"
+            description: "tenat unique id"
+          env_uid: 
+            type: "string"
+            description: "env uid in which the flow is run stag prod"
+            example: "1"
+          sync: 
+            type: "boolean"
+            description: "required to be true for http call"
+          reserved: 
+            type: "boolean"
+            description: "credit reserved"
+            example: "1"
+          available_runtime: 
+            type: "number"
+            description: "total time available the flow is allowed to run used for resume flows"
+            example: "180"
+          flow_uid: 
+            type: "string"
+            description: "flow unique id"
+          bill_uid: 
+            type: "string"
+            description: "bill unique id"
+          name: 
+            type: "string"
+            description: "flow name"
+          trigger: 
+            type: "string"
+            description: "trigger type manual, webhook or event"
+          queue: 
+            type: "string"
+            description: "The queue size in which to run flow. eg 256, 512, 1025 etc"
+            example: "256"
+          payloadId: 
+            type: "string"
+            description: "payload id"
+          project_uid: 
+            type: "string"
+            description: "project unique id"
